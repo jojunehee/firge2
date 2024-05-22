@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "929150186773",
+    "project_id": "frige2",
+    "storage_bucket": "frige2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929150186773:android:594dc9edc66377e2d1251c",
+        "android_client_info": {
+          "package_name": "com.example.firge2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDafDaU12A67joL2QbZQSdx8Ob8tTMj5lY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
