@@ -12,11 +12,11 @@ class MyPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.white,
         centerTitle: true,
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             icon: Icon(Icons.notifications),
@@ -89,7 +89,7 @@ class MyPage extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Color(0xFFF7E0E0),
+                color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
               child: ListView.separated(
@@ -154,19 +154,53 @@ class NotificationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('알림'),
+        backgroundColor: Colors.green,
       ),
-      body: Center(
-        child: Text('알림 페이지'),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.notification_important),
+            title: Text('우유'),
+            subtitle: Text('2024-05-23까지 사용하세요'),
+          ),
+          ListTile(
+            leading: Icon(Icons.notification_important),
+            title: Text('바나나'),
+            subtitle: Text('2024-05-26까지 사용하세요'),
+          ),
+          ListTile(
+            leading: Icon(Icons.notification_important),
+            title: Text('계란'),
+            subtitle: Text('2024-05-28까지 사용하세요'),
+          ),
+        ],
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: NotificationPage(),
+  ));
 }
 
 class TasteSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          '음식 취향 설정',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: Column(
           children: [
@@ -174,7 +208,7 @@ class TasteSettingPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(top: 24.0, left: 16.0),
                   child: Text(
                     '홍길동님의 음식 취향',
                     style: TextStyle(
@@ -239,25 +273,21 @@ class _NotificationSettingPage extends State<NotificationSettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          '알림 설정',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    '알림 설정',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             SizedBox(height: 10),
             ListTile(
               title: Text('소비기한 임박 알림'),
@@ -301,25 +331,21 @@ class SavedRecipePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          '저장한 레시피',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    '저장한 레시피',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             SizedBox(height: 10),
             Expanded(
               child: ListView(

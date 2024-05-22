@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Item {
-  final String name;
-  final String expiration;
-  final String location;
-  final XFile image;
+  String name;
+  String expiration;
+  String location;
+  XFile image;
 
   Item({
     required this.name,

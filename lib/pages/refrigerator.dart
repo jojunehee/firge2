@@ -32,8 +32,8 @@ class _RefrigeratorState extends State<Refrigerator> {
             unselectedLabelColor: Colors.black38,
             tabs: [
               Tab(text: "전체보기"),
-              Tab(text: "냉장고"),
-              Tab(text: "냉동고"),
+              Tab(text: "냉장실"),
+              Tab(text: "냉동실"),
             ],
           ),
           backgroundColor: Colors.white,
@@ -155,39 +155,60 @@ class _RefrigeratorState extends State<Refrigerator> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
-                return Stack(
-                  children: [
-                    Image.file(
-                      File(item.image.path),
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      top: 8.0,
-                      left: 8.0,
-                      child: Text(
-                        item.name,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          backgroundColor: Colors.black54,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckInformationPage(
+                          recognizedText: item.name + ' ' + item.expiration,
+                          image: item.image,
+                          onSubmit: (String name, String expiration,
+                              String location) {
+                            setState(() {
+                              item.name = name;
+                              item.expiration = expiration;
+                              item.location = location;
+                            });
+                          },
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 8.0,
-                      left: 8.0,
-                      child: Text(
-                        item.expiration,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          backgroundColor: Colors.black54,
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      Image.file(
+                        File(item.image.path),
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        top: 8.0,
+                        left: 8.0,
+                        child: Text(
+                          item.name,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            backgroundColor: Colors.black54,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      Positioned(
+                        bottom: 8.0,
+                        left: 8.0,
+                        child: Text(
+                          item.expiration,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            backgroundColor: Colors.black54,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -375,11 +396,19 @@ class _CheckInformationPageState extends State<CheckInformationPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context); // Close the modal
                     },
-                    child: Text('수정하기'),
+                    child: Text(
+                      '수정하기',
+                      style: TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey[200], // submit 버튼 초록색
+                    ),
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
@@ -513,7 +542,7 @@ class _CheckInformationPageState extends State<CheckInformationPage> {
                 onPressed: () {
                   _showModal(context);
                 },
-                child: Text('Submit'),
+                child: Text('등록'),
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF24AA5A), // submit 버튼 초록색
                 ),
