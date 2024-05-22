@@ -1,230 +1,165 @@
 import 'dart:io';
 
+import 'package:firge2/storeditem.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:image_picker/image_picker.dart';
-
+import 'package:provider/provider.dart';
 import 'pages/refrigerator.dart';
 import 'pages/recipe.dart';
 import 'pages/mypage.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ItemProvider(),
+      child: MyApp(),
+    ),
   );
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: MyHomePage(),
-      // home: TextRecognitionPage(),
+      title: 'My Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: OnboardingPage(),
     );
   }
 }
 
-class TextRecognitionPage extends StatefulWidget {
+class OnboardingPage extends StatefulWidget {
   @override
-  _TextRecognitionPageState createState() => _TextRecognitionPageState();
+  _OnboardingPageState createState() => _OnboardingPageState();
 }
 
-class _TextRecognitionPageState extends State<TextRecognitionPage> {
-  final ImagePicker _picker = ImagePicker();
-  String _recognizedText = 'Select an image to recognize text';
-  XFile? _selectedImage;
+class _OnboardingPageState extends State<OnboardingPage>
+    with TickerProviderStateMixin {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  late AnimationController _animationController;
+  late Animation<Offset> _offsetAnimation;
 
-  Future<void> _recognizeText(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source);
-    if (image == null) return;
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
 
-    final InputImage inputImage = InputImage.fromFilePath(image.path);
-    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(_animationController);
+  }
 
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
 
+  void _onPageChanged(int index) {
     setState(() {
-      _recognizedText = recognizedText.text;
-      _selectedImage = image;
+      _currentPage = index;
+      if (index == 2) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
     });
+  }
 
-    textRecognizer.close();
+  void _goToHomePage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Text Recognition Example'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () => _recognizeText(ImageSource.gallery),
-              child: Text('Pick Image from Gallery and Recognize Text'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _recognizeText(ImageSource.camera),
-              child: Text('Take Photo and Recognize Text'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (_selectedImage != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CheckInformationPage(
-                        recognizedText: _recognizedText,
-                        image: _selectedImage,
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: Text('Check Information'),
-            ),
-            SizedBox(height: 20),
-            Text(_recognizedText),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CheckInformationPage extends StatelessWidget {
-  final String recognizedText;
-  final XFile? image;
-
-  CheckInformationPage({required this.recognizedText, required this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    // Split the recognized text into three parts based on spaces or new lines.
-    List<String> parts = recognizedText.split(RegExp(r'[\s\n]+'));
-
-    String part1 = parts.length > 0 ? parts[0] : '';
-    String part2 = parts.length > 1 ? parts[1] : '';
-    String part3 = parts.length > 2 ? parts.sublist(2).join(' ') : '';
-
-    final TextEditingController controller1 =
-        TextEditingController(text: part1);
-    final TextEditingController controller2 =
-        TextEditingController(text: part2);
-    final TextEditingController controller3 =
-        TextEditingController(text: part3);
-
-    void _showModal(BuildContext context) {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
+      body: Stack(
+        children: [
+          PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: [
+              OnboardingContent(
+                imagePath: "assets/온보딩_1.png",
+              ),
+              OnboardingContent(
+                imagePath: "assets/온보딩_2.png",
+              ),
+              OnboardingContent(
+                imagePath: "assets/온보딩_3.png",
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 20,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('인식된 정보가 맞나요?'),
-                Text('잘 못 인식된 부분이 있다면 수정할 수 있어요!'),
-                SizedBox(height: 10),
-                Text('식재료명: ${controller1.text}'),
-                Text('소비기한: ${controller2.text}'),
-                Text('보관위치: ${controller3.text}'),
-                SizedBox(height: 20),
+              children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close the modal
-                      },
-                      child: Text('아니오'),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.popUntil(
-                            context,
-                            (route) =>
-                                route.isFirst); // Return to the first page
-                      },
-                      child: Text('예'),
-                    ),
-                  ],
+                  children: List.generate(3, (index) => _buildDot(index)),
                 ),
+                if (_currentPage == 2)
+                  SlideTransition(
+                    position: _offsetAnimation,
+                    child: ElevatedButton(
+                      onPressed: _goToHomePage,
+                      child: Text("Get Started"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF24AA5A),
+                        onPrimary: Colors.white,
+                      ),
+                    ),
+                  ),
               ],
             ),
-          );
-        },
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Check Information Page'),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('식재료명'),
-            SizedBox(height: 10),
-            TextField(
-              controller: controller1,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Enter your text here',
-              ),
-            ),
-            SizedBox(height: 20),
-            Text('소비기한'),
-            SizedBox(height: 10),
-            TextField(
-              controller: controller2,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Enter your text here',
-              ),
-            ),
-            SizedBox(height: 20),
-            Text('보관위치'),
-            SizedBox(height: 10),
-            TextField(
-              controller: controller3,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Enter your text here',
-              ),
-            ),
-            SizedBox(height: 20),
-            if (image != null)
-              Image.file(
-                File(image!.path),
-                height: 200,
-              ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  _showModal(context);
-                },
-                child: Text('Submit'),
-              ),
-            ),
-          ],
+    );
+  }
+
+  Widget _buildDot(int index) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      height: 8,
+      width: _currentPage == index ? 24 : 8,
+      decoration: BoxDecoration(
+        color: _currentPage == index ? Color(0xFF24AA5A) : Colors.grey,
+        borderRadius: BorderRadius.circular(12),
+      ),
+    );
+  }
+}
+
+class OnboardingContent extends StatelessWidget {
+  final String imagePath;
+
+  const OnboardingContent({
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -253,9 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('My App'),
-      // ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

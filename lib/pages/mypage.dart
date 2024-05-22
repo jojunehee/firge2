@@ -5,8 +5,17 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('마이 페이지'),
+        title: Text(
+          '마이 페이지',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -15,7 +24,8 @@ class MyPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationPage()),
-              );},
+              );
+            },
           ),
         ],
       ),
@@ -94,7 +104,11 @@ class MyPage extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(
-                      index == 0 ? '음식 취향 설정' : index == 1 ? '알림 설정' : '저장한 레시피',
+                      index == 0
+                          ? '음식 취향 설정'
+                          : index == 1
+                              ? '알림 설정'
+                              : '저장한 레시피',
                     ),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () {
@@ -102,19 +116,23 @@ class MyPage extends StatelessWidget {
                         case 0:
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => TasteSettingPage()),
+                            MaterialPageRoute(
+                                builder: (context) => TasteSettingPage()),
                           );
                           break;
                         case 1:
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NotificationSettingPage()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NotificationSettingPage()),
                           );
                           break;
                         case 2:
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SavedRecipePage()),
+                            MaterialPageRoute(
+                                builder: (context) => SavedRecipePage()),
                           );
                           break;
                       }
@@ -319,14 +337,14 @@ class SavedRecipePage extends StatelessWidget {
                         ),
                       ),
                       child: ListTile(
-                        title: Text('토마토 달걀 볶음',
+                        title: Text(
+                          '토마토 달걀 볶음',
                           style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        ),
-                        onTap: () {
-                        },
+                        onTap: () {},
                       ),
                     ),
                   ),
