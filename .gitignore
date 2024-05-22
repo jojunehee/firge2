@@ -10,7 +10,7 @@
 .svn/
 .env
 migrate_working_dir/
-
+/lib/pages/
 # IntelliJ related
 *.iml
 *.ipr
