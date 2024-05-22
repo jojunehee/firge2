@@ -6,6 +6,10 @@ import 'firebase_options.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'pages/refrigerator.dart';
+import 'pages/recipe.dart';
+import 'pages/mypage.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -21,7 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: TextRecognitionPage(),
+      home: MyHomePage(),
+      // home: TextRecognitionPage(),
     );
   }
 }
@@ -220,6 +225,67 @@ class CheckInformationPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  final List<Widget> _pages = [
+    Refrigerator(),
+    Recipe(),
+    MyPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('My App'),
+      // ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.kitchen),
+              label: '냉장고',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              label: '레시피',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: '마이페이지',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color(0xFF24AA5A),
+          onTap: _onItemTapped,
         ),
       ),
     );
