@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:firge2/storeditem.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/refrigerator.dart';
 import 'pages/recipe.dart';
 import 'pages/mypage.dart';
-
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(
