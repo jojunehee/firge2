@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: OnboardingPage()
-        // home: MyHomePage());
+        home: OnboardingPage());
+    // home: MyHomePage());
   }
 }
 
