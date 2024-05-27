@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const apiKey = '';
+const apiKey = 'sk-proj-osl9HFiWMORZHm2XYH25T3BlbkFJiGwvPsHIRmI3CnBpZPVR';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
 class Recipe extends StatefulWidget {
