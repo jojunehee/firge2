@@ -113,7 +113,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                     position: _offsetAnimation,
                     child: ElevatedButton(
                       onPressed: _goToHomePage,
-                      child: Text("Get Started"),
+                      child: Text("시작하기"),
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF24AA5A),
                         onPrimary: Colors.white,

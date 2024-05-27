@@ -187,7 +187,7 @@ class _CheckInformationPageState extends State<CheckInformationPage> {
               ),
             ),
             SizedBox(height: 20),
-            if (widget.image != null)
+            if (widget.image != false)
               Image.file(
                 File(widget.image.path),
                 height: 200,
